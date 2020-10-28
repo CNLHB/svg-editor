@@ -1,0 +1,551 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_2158408_trtummjpay.css">
+    <link rel="stylesheet" href="svg_editor.css">
+    <title>svg-editor</title>
+</head>
+<style type="text/css">
+    #picker {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+    }
+
+    #slide {
+        position: absolute;
+        width: 30px;
+        height: 200px;
+    }
+
+    #color-wrapper {
+        display: none;
+        position: absolute;
+        height: 200px;
+        z-index: 999;
+
+    }
+
+    #color-hex {
+        position: absolute;
+        color: #fff;
+        bottom: -20px;
+    }
+</style>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    body {
+        width: 100vh;
+        width: 100vw;
+        background: #3f3f3c;
+    }
+
+    #sidebar {
+        height: 100%;
+
+    }
+
+    .context_panel {
+        display: none;
+    }
+</style>
+<body>
+
+
+<div id="svg_editor">
+    <div id="menu_bar" class="active">
+        <a class="menu">
+            <div class="menu_title" id="logo">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg viewBox="0 0 16 16" version="1.1">
+                        <path id="svg_7" d="m-0.0965,16.1043l16.10001,-16.06917l-0.00001,16.06917l-16.1,0z"
+                              stroke-dasharray="null" stroke-width="1.5"
+                              fill="#cccccc"></path>
+                        <path id="svg_6" d="m0.0035,16.10449l0,-15.99999l16,15.99999l-16,0z"
+                              stroke-dasharray="null" stroke-width="1.5" fill="#666666"></path>
+                    </svg>
+                </svg>
+            </div>
+            <div class="menu_list">
+                <div id="tool_about" class="menu_item">编辑器说明...</div>
+                <div class="separator"></div>
+                <div id="tool_about1" class="menu_item">快捷键...</div>
+            </div>
+        </a>
+
+        <div class="menu">
+            <div class="menu_title">文件</div>
+            <div class="menu_list" id="file_menu">
+                <div id="tool_clear" class="menu_item">新建文档</div>
+                <div id="tool_open" class="menu_item" style=""><input type="file">
+                    <div id="fileinputs"></div>
+                    打开 SVG...
+                </div>
+                <div id="tool_import" class="menu_item" style=""><input type="file">
+                    <div id="fileinputs_import"></div>
+                    导入图片...
+                </div>
+                <div id="tool_save" class="menu_item">保存图片... <span class="shortcut">Ctrl+S</span></div>
+                <div id="tool_export" class="menu_item">导出 PNG</div>
+            </div>
+        </div>
+
+        <div class="menu">
+            <div class="menu_title">编辑</div>
+            <div class="menu_list" id="edit_menu">
+                <div class="menu_item" id="tool_undo">撤销 <span class="shortcut">Ctrl+Z</span></div>
+                <div class="menu_item" id="tool_redo">重做 <span class="shortcut">Ctrl+Y</span></div>
+                <div class="separator"></div>
+                <div class="menu_item action_selected disabled" id="tool_cut">剪切 <span class="shortcut">Ctrl+X</span>
+                </div>
+                <div class="menu_item action_selected disabled" id="tool_copy">复制 <span class="shortcut">Ctrl+C</span>
+                </div>
+                <div class="menu_item action_selected disabled" id="tool_paste">粘贴 <span class="shortcut">Ctrl+V</span>
+                </div>
+                <div class="menu_item action_selected disabled" id="tool_clone">复制并粘贴 <span
+                        class="shortcut">Ctrl+D</span></div>
+                <div class="menu_item action_selected disabled" id="tool_delete">删除 <span>⌫</span></div>
+            </div>
+        </div>
+
+        <div class="menu">
+            <div class="menu_title">对象</div>
+            <div class="menu_list" id="object_menu">
+                <div class="menu_item action_selected disabled" id="tool_move_top">置于顶层 <span
+                        class="shortcut">Ctrl+⇧↑</span></div>
+                <div class="menu_item action_selected disabled" id="tool_move_up">置于上一层 <span
+                        class="shortcut">Ctrl+↑</span></div>
+                <div class="menu_item action_selected disabled" id="tool_move_down">置于下一层 <span
+                        class="shortcut">Ctrl+↓</span></div>
+                <div class="menu_item action_selected disabled" id="tool_move_bottom">置于底层 <span class="shortcut">Ctrl+⇧↓</span>
+                </div>
+                <div class="separator"></div>
+                <div class="menu_item action_multi_selected disabled" id="tool_group">合并所选对象 <span class="shortcut">Ctrl+G</span>
+                </div>
+                <div class="menu_item action_group_selected disabled" id="tool_ungroup">解除合并 <span class="shortcut">Ctrl+⇧G</span>
+                </div>
+                <div class="separator"></div>
+                <div class="menu_item action_path_convert_selected disabled" id="tool_topath">转为 Path</div>
+                <div class="menu_item action_path_selected disabled" id="tool_reorient">重新调整 path</div>
+            </div>
+        </div>
+
+        <div class="menu">
+            <div class="menu_title">视图</div>
+            <div class="menu_list" id="view_menu">
+                <div class="menu_item push_button_pressed" id="tool_rulers">显示刻度尺</div>
+                <div class="menu_item" id="tool_wireframe">显示 Wireframe</div>
+                <div id="view_grid" title="View Grid" class="menu_item tool_button loaded">View Grid</div>
+                <div class="menu_item" id="tool_snap">网格对齐</div>
+                <div class="separator"></div>
+                <div class="menu_item" id="tool_source">源代码... <span class="shortcut">Ctrl+U</span></div>
+            </div>
+        </div>
+        <div class="menu">
+            <div class="menu_title" onclick="location.href='#'">editor工具</div>
+        </div>
+    </div>
+    <div id="sidebar">
+        <div id="tools_left" class="tools_panel">
+            <div class="loaded tool_button_current " id="tool_select" title="Select Tool  (V)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg viewBox="0 0 24 24" version="1.1">
+                        <g>
+                            <path fill="#2F2F2C"
+                                  d="M0,0v24h24V0H0z M17.147,20.757l-2.941,1.501l-3.677-6.005l-4.411,3.003V1.241l12.5,12.01l-4.412,1.501   L17.147,20.757z"></path>
+                        </g>
+                    </svg>
+                </svg>
+            </div>
+<!--            <div class="tool_button loaded" id="tool_fhpath" title="Pencil Tool  (Q)">-->
+<!--                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"-->
+<!--                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">-->
+<!--                    <svg viewBox="0 0 24 24" version="1.1">-->
+<!--                        <path fill="#2F2F2C"-->
+<!--                              d="M-1.5-1.5v27h27v-27 M19.616,9.216L6.647,21.567l-5.531,1.285l-0.1-0.094l1.449-5.269L15.438,5.204   c0.231-0.062,0.788-0.219,1.579-0.062L3.255,18.243l-0.394,1.381l1.58,1.504l1.481-0.375l0.66-0.598l0.065-1.408l-1.053-1.004   L18.203,5.736c0.196,0.157,0.196,0.157,0.396,0.376C20.476,7.869,19.616,9.216,19.616,9.216z M22.87,4.9   c-0.002,0.774-0.358,1.561-1.013,2.185l-1.217,1.16c0,0,0.921-1.348-0.989-3.103c-1.679-1.599-3.259-0.91-3.259-0.91l1.284-1.223   c1.154-1.126,3.161-1.126,4.278-0.062c0.622,0.549,0.913,1.239,0.915,1.938V4.9z"></path>-->
+<!--                    </svg>-->
+<!--                </svg>-->
+<!--            </div>-->
+            <div class="tool_button loaded" id="tool_line" title="Line Tool  (L)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                         x="0px" y="0px">
+	<path d="M 3 1 L 26 24 L 24 26 L 1 3 L 3 1 ZM 0 0 L 0 27 L 27 27 L 27 0 L 0 0 Z" fill="#2f2f2c"></path>
+</svg>
+                </svg>
+            </div>
+            <div class="tool_button loaded" id="tool_rect" title="Square/Rect Tool  (R)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                         x="0px" y="0px">
+	<path d="M 0 25 L 0 27 L 27 27 L 27 25 L 0 25 ZM 0 0 L 0 8 L 27 8 L 27 0 L 0 0 Z" fill="#2f2f2c"></path>
+</svg>
+                </svg>
+            </div>
+            <div class="loaded tool_button" id="tool_ellipse" title="Ellipse/Circle Tool  (C)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                         x="0px" y="0px">
+	<path fill="#2F2F2C"
+          d="M27,0H0v27h27 M13.25,7.617c6.742,0,12.207,3.846,12.207,8.59c0,4.745-5.465,8.591-12.207,8.591   S1.042,20.952,1.042,16.207C1.042,11.463,6.508,7.617,13.25,7.617z"></path>
+</svg>
+                </svg>
+            </div>
+            <div class="tool_button loaded" id="tool_path" title="Path Tool  (P)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                         x="0px" y="0px">
+	<g id="Layer%201">
+		<path fill="#2F2F2C"
+              d="M0,0v27h27V0H0z M12.193,1.904c0-0.365,0.871,0,0.871,0v12.105c-0.509,0.18-0.871,0.664-0.871,1.233c0,0.722,0.585,1.305,1.307,1.305c0.722,0,1.307-0.583,1.307-1.305c0-0.569-0.362-1.054-0.871-1.233V1.904c0,0,0.871-0.365,0.871,0c0,6.811,5.226,11.677,5.226,11.677l-3.256,8.193h-6.552l-3.256-8.193C6.968,13.581,12.193,8.714,12.193,1.904z M7.839,25.258v-2.612h11.322v2.612H7.839z"></path>
+	</g>
+</svg>
+                </svg>
+            </div>
+            <div id="tools_shapelib_show" title="Shape library" class="tool_button loaded" data-curopt="#tool_shapelib">
+                <div class="flyout_arrow_horiz">
+                    <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon" style="width: 5px; height: 5px;">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 25 50">
+                            <path stroke="none" fill="#ccc" d="m0,0l0,50l25,-25l-25,-25z"></path>
+                        </svg>
+                    </svg>
+                </div>
+                <img class="svg_icon"
+                     src="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjcgMjciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI3IiBoZWlnaHQ9IjI3IiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgY2xhc3M9InN2Z19pY29uIj48c3ZnIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICAgICAgPHBhdGggZmlsbD0iIzJGMkYyQyIgZD0iTTAsMHYyN2gyN1YwSDB6IE0yMC4zMjgsMjQuMTY2bC02Ljg5MS0zLjYyMmwtNi44OTEsMy42MjJsMS4zMTYtNy42NzJMMi4yODksMTEuMDZsNy43MDQtMS4xMjEgICAgICAgbDMuNDQ1LTYuOTc5bDMuNDQ3LDYuOThsNy43MDIsMS4xMjFsLTUuNTczLDUuNDM0TDIwLjMyOCwyNC4xNjZ6Ij48L3BhdGg+CiAgICA8L3N2Zz48L3N2Zz4=">
+            </div>
+            <div class="tool_button loaded" id="tool_text" title="Text Tool  (T)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                         x="0px" y="0px">
+	<path fill="#2F2F2C"
+          d="M0,0v27h27V0H0z M7.283,25.258v-1.741h0.539c1.133,0,1.879-0.204,2.224-0.64c0.345-0.422,0.525-1.157,0.525-2.191V4.355H8.733c-1.105,0-1.906,0.123-2.417,0.367C5.791,4.967,5.362,5.443,5.017,6.151C4.658,6.873,4.451,7.73,4.381,8.709H2.613V2.613h21.774v6.097H22.48c-0.359-1.701-0.87-2.858-1.52-3.457s-1.686-0.898-3.108-0.898h-1.976v16.331c0,1.062,0.165,1.81,0.525,2.218c0.358,0.409,1.104,0.613,2.236,0.613h0.595v1.741H7.283z"></path>
+</svg>
+                </svg>
+            </div>
+            <div class="tool_button loaded" id="tool_zoom" title="Zoom Tool  (Z)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                         x="0px" y="0px">
+	<circle fill="#2F2F2C" cx="10.887" cy="10.887" r="6.532"></circle>
+                        <path fill="#2F2F2C"
+                              d="M0,0v27h27V0H0z M15.373,18.856c-1.326,0.747-2.855,1.176-4.486,1.176c-5.051,0-9.145-4.095-9.145-9.145   c0-5.051,4.094-9.145,9.145-9.145c5.05,0,9.145,4.094,9.145,9.145c0,2.081-0.697,3.999-1.868,5.536l6.223,6.223l-2.612,2.612   L15.373,18.856z"></path>
+</svg>
+                </svg>
+            </div>
+
+            <div id="tool_eyedropper" title="Eye Dropper Tool [I]" class="tool_button loaded"><img class="svg_icon"
+                                                                                                   src="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjcgMjciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI3IiBoZWlnaHQ9IjI3IiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgY2xhc3M9InN2Z19pY29uIj48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIGlkPSJVbnRpdGxlZC1QYWdlJTIwMSIgdmlld0JveD0iMCAwIDI3IDI3IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeD0iMHB4IiB5PSIwcHgiPgogICAgPHBhdGggZmlsbD0iIzJGMkYyQyIgZD0iTTE2Ljg2NywxMS43MjlsLTEuNS0xLjQ5bC05Ljg0NSw5Ljc3N2MtMC4xOTgsMC45MTktMC42NTMsMS44MzgtMS4xMDQsMi41ODUgICAgICAgYzAuNzUyLTAuNDQ4LDEuNjc4LTAuODk5LDIuNjA0LTEuMDk2TDE2Ljg2NywxMS43Mjl6Ij48L3BhdGg+CiAgICA8cGF0aCBmaWxsPSIjMkYyRjJDIiBkPSJNMCwwdjI3aDI3VjBIMHogTTIuNzAyLDI0LjgwMWwtMC41LTAuNDk2bC0wLjQ2LTAuNDU3bDAuNDIxLTAuNDkzYzAuMDE2LTAuMDIsMS43MTEtMi4wMzEsMi4wMDgtMy43OTkgICAgIGwwLjAzNy0wLjIyMkwxNC4zNjcsOS4yNDdsLTAuMzMzLTAuMzMxYy0wLjQ1OS0wLjQ1Ny0wLjQ1OS0xLjE5OCwwLTEuNjU1bDEuNS0xLjQ4OWMwLjQ2LTAuNDU3LDEuMjA2LTAuNDU3LDEuNjY3LDBMMTkuNywzLjI4OWMwLDAsMi41LTIuNDgyLDMuODMzLTEuMTU4TDI0LjIsMi43OTJsMC42NjcsMC42NjJjMC4yOCwwLjI3OCwwLjM5MSwwLjYwOSwwLjM5MSwwLjk1N2MwLDEuMzAyLTEuNTU4LDIuODQ5LTEuNTU4LDIuODQ5ICAgbC0yLjUsMi40ODJsMC4xNjcsMC4xNjZjMC40NiwwLjQ1NywwLjQ2LDEuMTk3LDAsMS42NTVsLTEuNSwxLjQ4OWMtMC40NiwwLjQ1Ni0xLjIwNywwLjQ1Ni0xLjY2NywwbC0wLjMzMy0wLjMzMkw3LjcwOCwyMi44MDlsLTAuMjIzLDAuMDM3Yy0xLjc4NywwLjI5Ni0zLjgwNSwxLjk3OC0zLjgyNiwxLjk5NWwtMC40OTYsMC40MTdMMi43MDIsMjQuODAxeiI+PC9wYXRoPgogIDwvc3ZnPjwvc3ZnPg==">
+            </div>
+        </div>
+        <div id="tools_top" class="tools_panel">
+            <div id="color-wrapper">
+                <div id="picker"></div>
+                <div id="slide"></div>
+                <div id="color-hex">#000000</div>
+            </div>
+            <div id="line_panel" class="context_panel">
+                <h4 class="clearfix">直线</h4>
+                <h4 class="clearfix">线条形状</h4>
+                <h4 class="clearfix">线条颜色</h4>
+                <h4 class="clearfix">线条大小</h4>
+                <h4 class="clearfix">填充颜色</h4>
+
+            </div>
+            <div id="rect_panel" class="context_panel">
+                <h4 class="clearfix">矩形</h4>
+                <h4 class="clearfix">线条形状</h4>
+                <h4 class="clearfix">线条颜色</h4>
+                <h4 class="clearfix">线条大小</h4>
+                <h4 class="clearfix">填充颜色</h4>
+
+            </div>
+
+        </div>
+    </div>
+    <div id="workarea" style="overflow: hidden; line-height: 923px;" class="select">
+        <div id="svgcanvas" style="position: relative; width: 1093px; height: 923px;">
+            <svg width="1093" height="923" id="svgroot" xlinkns="http://www.w3.org/1999/xlink">
+                <svg id="canvasBackground" width="1024" height="768" x="34.5" y="77.5" overflow="none"
+                     style="pointer-events:none">
+                    <defs id="placeholder_defs">
+                        <pattern id="checkerPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="20" height="20"
+                                 viewBox="0 0 10 10">
+                            <rect x="0" y="0" width="10" height="10" fill="#fff"></rect>
+                            <rect x="0" y="0" width="5" height="5" fill="#eee"></rect>
+                            <rect x="5" y="5" width="5" height="5" fill="#eee"></rect>
+                        </pattern>
+                        <pattern id="gridpattern" patternUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+                            <image x="0" y="0" width="100" height="100"></image>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" x="0" y="0" stroke="#000" fill="url(#checkerPattern)"
+                          style="pointer-events:none"></rect>
+                </svg>
+                <svg id="svgcontent" width="1024" height="768" x="34.5" y="77.5" overflow="hidden"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 768">
+
+                    <!--                     xmlns:se="http://svg-edit.googlecode.com"-->
+                    <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+
+                    <g style="pointer-events:none"><title style="pointer-events:inherit">background</title>
+                        <rect x="-1" y="-1" width="1026" height="770" id="canvas_background" fill="#fff"
+                              style="pointer-events:inherit"></rect>
+                        <g id="canvasGrid" width="100%" height="100%" x="0" y="0" overflow="visible" display="none">
+                            <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none"
+                                  fill="url(#gridpattern)" style="pointer-events: none;"></rect>
+                        </g>
+
+                    </g>
+                    <g style="pointer-events:all"><title style="pointer-events:inherit">Layer 1</title></g>
+                    <g id="selectorParentGroup">
+                        <g id="selectorCir" display="none" transform ="translate(0,0)">
+
+                        </g>
+                    </g>
+                </svg>
+
+            </svg>
+        </div>
+    </div>
+
+</div>
+<script src="./js/variable.js"></script>
+<script src="./js/util.js"></script>
+<script src="./js/colorPicker.js"></script>
+<script>
+    ColorPicker(
+        document.getElementById('slide'),
+        document.getElementById('picker'),
+        function (hex, hsv, rgb) {
+            document.body.style.backgroundColor = hex;
+            color_hex.textContent = hex;
+            // console.log(hex, hsv, rgb);
+        });
+
+
+
+    menu_bar.addEventListener('click', handleMenuClick)
+    tools_left.addEventListener('click', handleToolsClick)
+    svgCanvas.addEventListener('click', handleSvgCanvasClick)
+    svgCanvas.addEventListener('mousedown', mousedownHandler)
+    svgCanvas.addEventListener('mousemove', mousemoveHandler, true)
+    document.addEventListener('mouseup', mouseupHandler)
+
+    //鼠标样式
+
+
+    function handleToolsClick(event) {
+        toogleClass(event.target)
+        if (selectSVG !== null) {
+            updateSVGRact(selectSVG, selectParams)
+            removeSelectTips(selectorCir)
+            selectSVG = null
+        }
+    }
+
+    function handleMenuClick(event) {
+        event.target.classList.toggle('open')
+
+    }
+
+    function handleSvgCanvasClick(event) {
+        //获取鼠标点击的坐标
+        let x = event.pageX - offsetX
+        let y = event.pageY - offsetY
+        pointerStart.x = x
+        pointerStart.y = y
+        let target = event.target
+        let name = target.nodeName
+        //判断是否为辅助点
+        if (target&&target.getAttribute('id')&&target.getAttribute('id').startsWith('tip')){
+            return
+        }
+        //判断是否重复选择自身
+        if (target === selectSVG) {
+            return
+        }
+        //判断选择其他svg元素
+        if (selectSVG !== null) {
+            updateSVGRact(selectSVG, selectParams)
+            selectSVG = null
+            removeSelectTips(selectorCir)
+        }
+        //选择svg line元素
+        if (name == "line") {
+            selectPanel = document.getElementById(name + suffix)
+            selectPanel.style.display = "block"
+
+        }
+        //选择svg rect元素 ，创建辅助点， 展示rect面板,同时保存元素样式，取消选中时复原
+        if (name == 'rect') {
+            selectPanel = document.getElementById(name + suffix)
+            selectPanel.style.display = "block"
+            selectParams = {
+                stroke: target.getAttribute('stroke')
+            }
+            target.setAttribute('stroke', 'red');
+            createSelectTips(target, selectorCir)
+            selectSVG = target
+        }
+        console.log(target)
+    }
+
+    svgCanvas.addEventListener('contextmenu', function (event) {
+        event.preventDefault()
+        shape = "select"
+        svgCanvas.style.cursor = pointerValue[shape]
+        toogleClass(tool_select)
+        removeSelectTips(selectorCir)
+        selectPanel && (selectPanel.style.display = "none")
+        selectSVG && selectSVG.setAttribute('stroke', selectParams.stroke);
+        selectPanel = null
+        selectSVG = null
+        editFalg = false
+        return false
+    })
+
+    function mouseupHandler(ev) {
+        flagDraw = false
+        dargFalg = false
+        editFalg = false
+        currentTarget = null
+        pointerStart = {
+            x: 0, y: 0
+        }
+        pointerEnd = {
+            x: 0, y: 0
+        }
+        console.log("mouseupHandler")
+
+    }
+
+    function mousemoveHandler(ev) {
+        ev.stopPropagation()
+        let x = ev.pageX - offsetX
+        let y = ev.pageY - offsetY
+        let target = ev.target
+        //层级拖动
+        if (selectSVG && editFalg){
+            if (selectSVG.nodeName == 'rect') {
+                let currentX = parseInt(selectSVG.getAttribute('x'))
+                let currentY = parseInt(selectSVG.getAttribute('y'))
+                if (x - currentX < 0 || y - currentY < 0) {
+                    updateSVGRact(selectSVG, {
+                        x: x,
+                        y: y,
+                        width: Math.abs(x - pointerStart.x),
+                        height: Math.abs(y -  pointerStart.y)
+                    })
+                } else {
+                    pointerStart.x = parseInt(selectSVG.getAttribute('x'))
+                    pointerStart.y = parseInt(selectSVG.getAttribute('y'))
+                    updateSVGRact(selectSVG, {
+                        width: x - currentX,
+                        height: y - currentY
+                    })
+                }
+                createSelectTips(selectSVG, selectorCir)
+            }
+            return
+        }
+        if (dargFalg && selectSVG) {
+            if (target.nodeName == 'rect') {
+                let currentX = parseInt(selectSVG.getAttribute('x'))
+                let currentY = parseInt(selectSVG.getAttribute('y'))
+                selectSVG.setAttribute('x', currentX + x - pointerStart.x);
+                selectSVG.setAttribute('y', currentY + y - pointerStart.y);
+                pointerStart.x = x
+                pointerStart.y = y
+                createSelectTips(selectSVG, selectorCir)
+            }
+
+            return
+        }
+        if (!flagDraw) return false
+        if (shape == "rect") {
+            if (currentTarget) {
+                if (x - pointerStart.x < 0 && y - pointerStart.y < 0) {
+                    updateSVGRact(currentTarget, {
+                        x: x,
+                        y: y,
+                        width: Math.sqrt((x - pointerStart.x) ** 2),
+                        height: Math.sqrt((y - pointerStart.y) ** 2)
+                    })
+                } else {
+                    updateSVGRact(currentTarget, {
+                        width: Math.sqrt((x - pointerStart.x) ** 2),
+                        height: Math.sqrt((y - pointerStart.y) ** 2)
+                    })
+                }
+                return
+            }
+            currentTarget = createSVGRact(pointerStart.x, pointerStart.y, x, y)
+        }
+        if (shape === "line") {
+            if (currentTarget) {
+                currentTarget.setAttribute('x2', x);
+                currentTarget.setAttribute('y2', y);
+                return
+            }
+            currentTarget = createLine(pointerStart.x, pointerStart.y, x, y)
+        }
+        if (shape === 'ellipse') {
+            if (currentTarget) {
+                currentTarget.setAttribute('cx', [pointerStart.x + x] / 2);
+                currentTarget.setAttribute('cy', [pointerStart.y + y] / 2);
+                currentTarget.setAttribute('r', Math.sqrt((pointerStart.x - x - 1) ** 2 + (pointerStart.y - y - 1) ** 2) / 2);
+                return
+            }
+            currentTarget = createCircle(pointerStart.x, pointerStart.y, x, y);
+
+        }
+
+
+    }
+
+    function mousedownHandler(ev) {
+        let x = ev.pageX - offsetX
+        let y = ev.pageY - offsetY
+        //层级如何保证看到的是置于顶层的
+        let target = ev.target
+        flagDraw = true
+        dargFalg = true
+        pointerStart = {
+            x, y
+        }
+        if (target&&target.getAttribute('id')&&target.getAttribute('id').startsWith('tip')){
+            editFalg = true
+            return
+        }
+
+    }
+
+
+</script>
+</body>
+</html>
