@@ -3,6 +3,10 @@ let menu_bar = document.querySelector('#menu_bar')
 let color_hex = document.querySelector('#color-hex')
 let tools_left = document.querySelector('#tools_left')
 let svgcontent = document.querySelector('#svgcontent')
+let element = SVG(svgcontent)
+let draw = SVG().addTo('#svgcontent')
+
+
 let tool_select = document.querySelector('#tool_select')
 let selectorCir = document.querySelector('#selectorCir')
 let svgRact = svgcontent.getBoundingClientRect()
@@ -14,6 +18,7 @@ let suffix = '_panel'
 let selectPanel;
 let currentTarget = null
 let selectSVG = null
+let selectTip = null
 let selectParams = {}
 let dargFalg = false
 let editFalg = false
@@ -35,4 +40,5 @@ var attrsToConvert = {
     "use": ['x', 'y', 'width', 'height'],
     "text": ['x', 'y']
 };
+
 

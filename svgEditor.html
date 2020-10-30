@@ -167,15 +167,15 @@
                     </svg>
                 </svg>
             </div>
-<!--            <div class="tool_button loaded" id="tool_fhpath" title="Pencil Tool  (Q)">-->
-<!--                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"-->
-<!--                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">-->
-<!--                    <svg viewBox="0 0 24 24" version="1.1">-->
-<!--                        <path fill="#2F2F2C"-->
-<!--                              d="M-1.5-1.5v27h27v-27 M19.616,9.216L6.647,21.567l-5.531,1.285l-0.1-0.094l1.449-5.269L15.438,5.204   c0.231-0.062,0.788-0.219,1.579-0.062L3.255,18.243l-0.394,1.381l1.58,1.504l1.481-0.375l0.66-0.598l0.065-1.408l-1.053-1.004   L18.203,5.736c0.196,0.157,0.196,0.157,0.396,0.376C20.476,7.869,19.616,9.216,19.616,9.216z M22.87,4.9   c-0.002,0.774-0.358,1.561-1.013,2.185l-1.217,1.16c0,0,0.921-1.348-0.989-3.103c-1.679-1.599-3.259-0.91-3.259-0.91l1.284-1.223   c1.154-1.126,3.161-1.126,4.278-0.062c0.622,0.549,0.913,1.239,0.915,1.938V4.9z"></path>-->
-<!--                    </svg>-->
-<!--                </svg>-->
-<!--            </div>-->
+            <!--            <div class="tool_button loaded" id="tool_fhpath" title="Pencil Tool  (Q)">-->
+            <!--                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"-->
+            <!--                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">-->
+            <!--                    <svg viewBox="0 0 24 24" version="1.1">-->
+            <!--                        <path fill="#2F2F2C"-->
+            <!--                              d="M-1.5-1.5v27h27v-27 M19.616,9.216L6.647,21.567l-5.531,1.285l-0.1-0.094l1.449-5.269L15.438,5.204   c0.231-0.062,0.788-0.219,1.579-0.062L3.255,18.243l-0.394,1.381l1.58,1.504l1.481-0.375l0.66-0.598l0.065-1.408l-1.053-1.004   L18.203,5.736c0.196,0.157,0.196,0.157,0.396,0.376C20.476,7.869,19.616,9.216,19.616,9.216z M22.87,4.9   c-0.002,0.774-0.358,1.561-1.013,2.185l-1.217,1.16c0,0,0.921-1.348-0.989-3.103c-1.679-1.599-3.259-0.91-3.259-0.91l1.284-1.223   c1.154-1.126,3.161-1.126,4.278-0.062c0.622,0.549,0.913,1.239,0.915,1.938V4.9z"></path>-->
+            <!--                    </svg>-->
+            <!--                </svg>-->
+            <!--            </div>-->
             <div class="tool_button loaded" id="tool_line" title="Line Tool  (L)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
                      xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
@@ -321,9 +321,9 @@
                         </g>
 
                     </g>
-                    <g style="pointer-events:all"><title style="pointer-events:inherit">Layer 1</title></g>
+                    <!--                    <g style="pointer-events:all"><title style="pointer-events:inherit">Layer 1</title></g>-->
                     <g id="selectorParentGroup">
-                        <g id="selectorCir" display="none" transform ="translate(0,0)">
+                        <g id="selectorCir" display="none" transform="translate(0,0)">
 
                         </g>
                     </g>
@@ -334,6 +334,9 @@
     </div>
 
 </div>
+<script src="./js/lib/jquery.js"></script>
+<script src="./js/lib/jquery-svg.js"></script>
+<script src="./js/lib/svg.js"></script>
 <script src="./js/variable.js"></script>
 <script src="./js/util.js"></script>
 <script src="./js/colorPicker.js"></script>
@@ -347,72 +350,74 @@
             // console.log(hex, hsv, rgb);
         });
 
-
-
     menu_bar.addEventListener('click', handleMenuClick)
     tools_left.addEventListener('click', handleToolsClick)
     svgCanvas.addEventListener('click', handleSvgCanvasClick)
     svgCanvas.addEventListener('mousedown', mousedownHandler)
-    svgCanvas.addEventListener('mousemove', mousemoveHandler, true)
     document.addEventListener('mouseup', mouseupHandler)
+
 
     //鼠标样式
 
-
+    //点击左侧工具栏处理函数
     function handleToolsClick(event) {
+        //改变样式
         toogleClass(event.target)
         if (selectSVG !== null) {
-            updateSVGRact(selectSVG, selectParams)
+            updateSVG($(selectSVG), selectParams)
             removeSelectTips(selectorCir)
             selectSVG = null
         }
     }
 
+    //顶部工具栏处理函数
     function handleMenuClick(event) {
         event.target.classList.toggle('open')
 
     }
 
+    //点击画布处理函数
     function handleSvgCanvasClick(event) {
         //获取鼠标点击的坐标
         let x = event.pageX - offsetX
         let y = event.pageY - offsetY
         pointerStart.x = x
         pointerStart.y = y
-        let target = event.target
-        let name = target.nodeName
+        if (pointerValue[shape] !== 'default') {
+            return
+        }
+        let target = $(event.target)
+        let name = target[0].nodeName
         //判断是否为辅助点
-        if (target&&target.getAttribute('id')&&target.getAttribute('id').startsWith('tip')){
+        if (target && target.attr('id') && target.attr('id').startsWith('tip')) {
             return
         }
         //判断是否重复选择自身
-        if (target === selectSVG) {
+        if (target[0] === selectSVG) {
             return
         }
         //判断选择其他svg元素
         if (selectSVG !== null) {
-            updateSVGRact(selectSVG, selectParams)
+            updateSVG($(selectSVG), selectParams)
             selectSVG = null
             removeSelectTips(selectorCir)
         }
         //选择svg line元素
-        if (name == "line") {
-            selectPanel = document.getElementById(name + suffix)
-            selectPanel.style.display = "block"
-
-        }
         //选择svg rect元素 ，创建辅助点， 展示rect面板,同时保存元素样式，取消选中时复原
-        if (name == 'rect') {
-            selectPanel = document.getElementById(name + suffix)
-            selectPanel.style.display = "block"
-            selectParams = {
-                stroke: target.getAttribute('stroke')
-            }
-            target.setAttribute('stroke', 'red');
-            createSelectTips(target, selectorCir)
-            selectSVG = target
+        selectPanel = document.getElementById(name + suffix)
+        selectParams = {
+            stroke: target.attr('stroke'),
+            'stroke-linecap': 'butt'
         }
-        console.log(target)
+        selectPanel && (selectPanel.style.display = "block")
+        updateSVG(target, {
+            stroke: 'red',
+            'stroke-linecap': 'round',
+        })
+        //`stroke-linecap`
+        svgHandle[name] && createSelectTips(target, selectorCir)
+        // svgHandle[name](target, selectorCir)
+        selectSVG = target[0]
     }
 
     svgCanvas.addEventListener('contextmenu', function (event) {
@@ -422,7 +427,7 @@
         toogleClass(tool_select)
         removeSelectTips(selectorCir)
         selectPanel && (selectPanel.style.display = "none")
-        selectSVG && selectSVG.setAttribute('stroke', selectParams.stroke);
+        selectSVG && $(selectSVG).attr('stroke', selectParams.stroke);
         selectPanel = null
         selectSVG = null
         editFalg = false
@@ -430,6 +435,7 @@
     })
 
     function mouseupHandler(ev) {
+        svgCanvas.removeEventListener('mousemove', mousemoveHandler, true)
         flagDraw = false
         dargFalg = false
         editFalg = false
@@ -448,77 +454,122 @@
         ev.stopPropagation()
         let x = ev.pageX - offsetX
         let y = ev.pageY - offsetY
+
         let target = ev.target
-        //层级拖动
-        if (selectSVG && editFalg){
+        //编辑
+        if (selectSVG && editFalg) {
+            //编辑矩形
             if (selectSVG.nodeName == 'rect') {
-                let currentX = parseInt(selectSVG.getAttribute('x'))
-                let currentY = parseInt(selectSVG.getAttribute('y'))
-                if (x - currentX < 0 || y - currentY < 0) {
-                    updateSVGRact(selectSVG, {
-                        x: x,
-                        y: y,
-                        width: Math.abs(x - pointerStart.x),
-                        height: Math.abs(y -  pointerStart.y)
-                    })
-                } else {
-                    pointerStart.x = parseInt(selectSVG.getAttribute('x'))
-                    pointerStart.y = parseInt(selectSVG.getAttribute('y'))
-                    updateSVGRact(selectSVG, {
-                        width: x - currentX,
-                        height: y - currentY
-                    })
-                }
-                createSelectTips(selectSVG, selectorCir)
+                let offsetX = x - pointerStart.x
+                let offsetY = y - pointerStart.y
+                let width = Math.abs(offsetX)
+                let height = Math.abs(offsetY)
+                offsetX < 0 && $(selectSVG).attr('x', x);
+                offsetY < 0 && $(selectSVG).attr('y', y);
+                updateSVG($(selectSVG), {
+                    width,
+                    height
+                })
             }
+            if (selectSVG.nodeName == 'line') {
+                let id = parseInt(selectTip.getAttribute('id').split('_')[1])
+                updateSVG($(selectSVG), {
+                    ['x' + (id + 1)]: x, ['y' + (id + 1)]: y
+                })
+            }
+            if (selectSVG.nodeName == 'circle') {
+                console.log('click')
+                //计算圆的半径
+                let r = Math.floor(Math.sqrt(computeDistance(pointerStart.x, pointerStart.y, x, y) ** 2 / 8));
+                let offsetX = x - pointerStart.x
+                let offsetY = y - pointerStart.y
+                let sel = $(selectSVG)
+                updateSVG(sel, {
+                    r: r,
+                    cx: pointerStart.x + (offsetX < 0 ? -r : r), cy: pointerStart.y + (offsetY < 0 ? -r : r)
+                })
+            }
+            createSelectTips($(selectSVG), selectorCir)
             return
         }
-        if (dargFalg && selectSVG) {
-            if (target.nodeName == 'rect') {
-                let currentX = parseInt(selectSVG.getAttribute('x'))
-                let currentY = parseInt(selectSVG.getAttribute('y'))
-                selectSVG.setAttribute('x', currentX + x - pointerStart.x);
-                selectSVG.setAttribute('y', currentY + y - pointerStart.y);
+        // && target == selectSVG
+        //拖动
+        if (selectSVG && dargFalg) {
+            if (selectSVG.nodeName == 'rect') {
+                let currentX = isNaN(parseInt(selectSVG.getAttribute('x'))) ? 0 : parseInt(selectSVG.getAttribute('x'))
+                let currentY = isNaN(parseInt(selectSVG.getAttribute('y'))) ? 0 : parseInt(selectSVG.getAttribute('y'))
+                updateSVG($(selectSVG), {
+                    x: currentX + x - pointerStart.x,
+                    y: currentY + y - pointerStart.y
+                })
                 pointerStart.x = x
                 pointerStart.y = y
-                createSelectTips(selectSVG, selectorCir)
             }
-
+            if (selectSVG.nodeName == 'line') {
+                let sel = $(selectSVG)
+                let x1 = parseInt(sel.attr('x1'));
+                let y1 = parseInt(sel.attr('y1'));
+                let x2 = parseInt(sel.attr('x2'));
+                let y2 = parseInt(sel.attr('y2'));
+                // addNum
+                let moveX = minNum(x, pointerStart.x)
+                let moveY = minNum(y, pointerStart.y)
+                updateSVG(sel, {
+                    x1: x1 - moveX, y1: y1 - moveY,
+                    x2: x2 - moveX, y2: y2 - moveY
+                })
+                pointerStart.x = x
+                pointerStart.y = y
+            }
+            if (selectSVG.nodeName == 'circle') {
+                let sel = $(selectSVG)
+                let currentX = parseInt(sel.attr('cx'))
+                let currentY = parseInt(sel.attr('cy'))
+                updateSVG(sel, {
+                    cx: currentX + minNum(x, pointerStart.x), cy: currentY + minNum(y, pointerStart.y)
+                })
+                pointerStart.x = x
+                pointerStart.y = y
+            }
+            createSelectTips($(selectSVG), selectorCir)
             return
         }
         if (!flagDraw) return false
+        //初次绘制
         if (shape == "rect") {
             if (currentTarget) {
-                if (x - pointerStart.x < 0 && y - pointerStart.y < 0) {
-                    updateSVGRact(currentTarget, {
-                        x: x,
-                        y: y,
-                        width: Math.sqrt((x - pointerStart.x) ** 2),
-                        height: Math.sqrt((y - pointerStart.y) ** 2)
-                    })
-                } else {
-                    updateSVGRact(currentTarget, {
-                        width: Math.sqrt((x - pointerStart.x) ** 2),
-                        height: Math.sqrt((y - pointerStart.y) ** 2)
-                    })
-                }
+                let offsetX = x - pointerStart.x
+                let offsetY = y - pointerStart.y
+                let width = Math.abs(offsetX)
+                let height = Math.abs(offsetY)
+                offsetX < 0 && currentTarget.attr('x', x);
+                offsetY < 0 && currentTarget.attr('y', y);
+                updateSVG(currentTarget, {
+                    width,
+                    height
+                })
                 return
             }
             currentTarget = createSVGRact(pointerStart.x, pointerStart.y, x, y)
         }
         if (shape === "line") {
             if (currentTarget) {
-                currentTarget.setAttribute('x2', x);
-                currentTarget.setAttribute('y2', y);
+                updateSVG(currentTarget, {
+                    x2: x,
+                    y2: y
+                })
                 return
             }
             currentTarget = createLine(pointerStart.x, pointerStart.y, x, y)
         }
         if (shape === 'ellipse') {
+
             if (currentTarget) {
-                currentTarget.setAttribute('cx', [pointerStart.x + x] / 2);
-                currentTarget.setAttribute('cy', [pointerStart.y + y] / 2);
-                currentTarget.setAttribute('r', Math.sqrt((pointerStart.x - x - 1) ** 2 + (pointerStart.y - y - 1) ** 2) / 2);
+                updateSVG(currentTarget, {
+                    cx: (pointerStart.x + x) / 2,
+                    cy: (pointerStart.y + y) / 2,
+                    r: Math.sqrt((pointerStart.x - x - 1) ** 2 + (pointerStart.y - y - 1) ** 2) / 2
+                })
                 return
             }
             currentTarget = createCircle(pointerStart.x, pointerStart.y, x, y);
@@ -529,18 +580,36 @@
     }
 
     function mousedownHandler(ev) {
+        svgCanvas.addEventListener('mousemove', mousemoveHandler, true)
         let x = ev.pageX - offsetX
         let y = ev.pageY - offsetY
         //层级如何保证看到的是置于顶层的
         let target = ev.target
         flagDraw = true
-        dargFalg = true
+        if (pointerValue[shape] == 'default') {
+            dargFalg = true
+        }
+        if (target.getAttribute('id') && target.getAttribute('id').startsWith('tip')) {
+            editFalg = true
+            selectTip = target
+            let id = parseInt(selectTip.getAttribute('id').split('_')[1])
+            //获取固定点
+            var rectPointMap = {
+                "0": "2",
+                "1": "3",
+                "2": "0",
+                "3": "1"
+            }
+            let point = "#tip_" + rectPointMap[id]
+            let x1 = parseInt($(point).attr('cx'))
+            let y1 = parseInt($(point).attr('cy'))
+            pointerStart = {
+                x: x1, y: y1
+            }
+            return
+        }
         pointerStart = {
             x, y
-        }
-        if (target&&target.getAttribute('id')&&target.getAttribute('id').startsWith('tip')){
-            editFalg = true
-            return
         }
 
     }
