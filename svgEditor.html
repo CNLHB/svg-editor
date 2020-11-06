@@ -1,11 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://at.alicdn.com/t/font_2158408_trtummjpay.css">
-    <link rel="stylesheet" href="svg_editor.css">
+    <!--    <link rel="stylesheet" href="https://at.alicdn.com/t/font_2158408_trtummjpay.css">-->
+    <link rel="stylesheet" href="css/svg_editor.css">
     <title>svg-editor</title>
 </head>
 <style type="text/css">
@@ -31,7 +32,7 @@
 
     #color-hex {
         position: absolute;
-        color: #fff;
+        color: #ffffff;
         bottom: -20px;
     }
 </style>
@@ -43,7 +44,7 @@
     }
 
     body {
-        width: 100vh;
+        height: 100vh;
         width: 100vw;
         background: #3f3f3c;
     }
@@ -53,8 +54,39 @@
 
     }
 
-    .context_panel {
-        display: none;
+    .panel-line {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 10px 0 0;
+
+    }
+
+    .panel-line span {
+        color: #ffffff;
+    }
+
+    .panel-line select {
+        /*清除select的边框样式*/
+        /*padding: 5px 10px;*/
+        width: 75px;
+        height: 25px;
+        border: none;
+        /*清除select聚焦时候的边框颜色*/
+        outline: none;
+        text-align: left;
+        /*将select的宽高等于div的宽高*/
+        /*隐藏select的下拉图标*/
+        /*appearance: none;*/
+        /*-webkit-appearance: none;*/
+        /*-moz-appearance: none;*/
+        /*通过padding-left的值让文字居中*/
+    }
+
+    .panel-line option {
+        /*用div的样式代替select的样式*/
+        /*border-radius: 5px;*/
+        /*盒子阴影修饰作用,自己随意*/
+        /* box-shadow: 0 0 5px #ccc;*/
     }
 </style>
 <body>
@@ -65,8 +97,8 @@
         <a class="menu">
             <div class="menu_title" id="logo">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg viewBox="0 0 16 16" version="1.1">
+                     class="svg_icon">
+                    <svg viewBox="0 0 16 16">
                         <path id="svg_7" d="m-0.0965,16.1043l16.10001,-16.06917l-0.00001,16.06917l-16.1,0z"
                               stroke-dasharray="null" stroke-width="1.5"
                               fill="#cccccc"></path>
@@ -158,8 +190,8 @@
         <div id="tools_left" class="tools_panel">
             <div class="loaded tool_button_current " id="tool_select" title="Select Tool  (V)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg viewBox="0 0 24 24" version="1.1">
+                     class="svg_icon">
+                    <svg viewBox="0 0 24 24">
                         <g>
                             <path fill="#2F2F2C"
                                   d="M0,0v24h24V0H0z M17.147,20.757l-2.941,1.501l-3.677-6.005l-4.411,3.003V1.241l12.5,12.01l-4.412,1.501   L17.147,20.757z"></path>
@@ -167,20 +199,20 @@
                     </svg>
                 </svg>
             </div>
-            <!--            <div class="tool_button loaded" id="tool_fhpath" title="Pencil Tool  (Q)">-->
-            <!--                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"-->
-            <!--                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">-->
-            <!--                    <svg viewBox="0 0 24 24" version="1.1">-->
-            <!--                        <path fill="#2F2F2C"-->
-            <!--                              d="M-1.5-1.5v27h27v-27 M19.616,9.216L6.647,21.567l-5.531,1.285l-0.1-0.094l1.449-5.269L15.438,5.204   c0.231-0.062,0.788-0.219,1.579-0.062L3.255,18.243l-0.394,1.381l1.58,1.504l1.481-0.375l0.66-0.598l0.065-1.408l-1.053-1.004   L18.203,5.736c0.196,0.157,0.196,0.157,0.396,0.376C20.476,7.869,19.616,9.216,19.616,9.216z M22.87,4.9   c-0.002,0.774-0.358,1.561-1.013,2.185l-1.217,1.16c0,0,0.921-1.348-0.989-3.103c-1.679-1.599-3.259-0.91-3.259-0.91l1.284-1.223   c1.154-1.126,3.161-1.126,4.278-0.062c0.622,0.549,0.913,1.239,0.915,1.938V4.9z"></path>-->
-            <!--                    </svg>-->
-            <!--                </svg>-->
-            <!--            </div>-->
+            <div class="tool_button loaded" id="tool_fhpath" title="Pencil Tool  (Q)">
+                <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                     class="svg_icon">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#2F2F2C"
+                              d="M-1.5-1.5v27h27v-27 M19.616,9.216L6.647,21.567l-5.531,1.285l-0.1-0.094l1.449-5.269L15.438,5.204   c0.231-0.062,0.788-0.219,1.579-0.062L3.255,18.243l-0.394,1.381l1.58,1.504l1.481-0.375l0.66-0.598l0.065-1.408l-1.053-1.004   L18.203,5.736c0.196,0.157,0.196,0.157,0.396,0.376C20.476,7.869,19.616,9.216,19.616,9.216z M22.87,4.9   c-0.002,0.774-0.358,1.561-1.013,2.185l-1.217,1.16c0,0,0.921-1.348-0.989-3.103c-1.679-1.599-3.259-0.91-3.259-0.91l1.284-1.223   c1.154-1.126,3.161-1.126,4.278-0.062c0.622,0.549,0.913,1.239,0.915,1.938V4.9z"></path>
+                    </svg>
+                </svg>
+            </div>
             <div class="tool_button loaded" id="tool_line" title="Line Tool  (L)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
-                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                     class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff" xml:space="preserve"
                          x="0px" y="0px">
 	<path d="M 3 1 L 26 24 L 24 26 L 1 3 L 3 1 ZM 0 0 L 0 27 L 27 27 L 27 0 L 0 0 Z" fill="#2f2f2c"></path>
 </svg>
@@ -188,9 +220,9 @@
             </div>
             <div class="tool_button loaded" id="tool_rect" title="Square/Rect Tool  (R)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
-                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                     class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff" xml:space="preserve"
                          x="0px" y="0px">
 	<path d="M 0 25 L 0 27 L 27 27 L 27 25 L 0 25 ZM 0 0 L 0 8 L 27 8 L 27 0 L 0 0 Z" fill="#2f2f2c"></path>
 </svg>
@@ -198,9 +230,9 @@
             </div>
             <div class="loaded tool_button" id="tool_ellipse" title="Ellipse/Circle Tool  (C)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
-                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                     class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff" xml:space="preserve"
                          x="0px" y="0px">
 	<path fill="#2F2F2C"
           d="M27,0H0v27h27 M13.25,7.617c6.742,0,12.207,3.846,12.207,8.59c0,4.745-5.465,8.591-12.207,8.591   S1.042,20.952,1.042,16.207C1.042,11.463,6.508,7.617,13.25,7.617z"></path>
@@ -209,9 +241,9 @@
             </div>
             <div class="tool_button loaded" id="tool_path" title="Path Tool  (P)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
-                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                     class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff" xml:space="preserve"
                          x="0px" y="0px">
 	<g id="Layer%201">
 		<path fill="#2F2F2C"
@@ -223,8 +255,8 @@
             <div id="tools_shapelib_show" title="Shape library" class="tool_button loaded" data-curopt="#tool_shapelib">
                 <div class="flyout_arrow_horiz">
                     <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                         xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon" style="width: 5px; height: 5px;">
-                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                         class="svg_icon" style="width: 5px; height: 5px;">
+                        <svg xmlns="http://www.w3.org/2000/svg"
                              viewBox="0 0 25 50">
                             <path stroke="none" fill="#ccc" d="m0,0l0,50l25,-25l-25,-25z"></path>
                         </svg>
@@ -235,9 +267,9 @@
             </div>
             <div class="tool_button loaded" id="tool_text" title="Text Tool  (T)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
-                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                     class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff" xml:space="preserve"
                          x="0px" y="0px">
 	<path fill="#2F2F2C"
           d="M0,0v27h27V0H0z M7.283,25.258v-1.741h0.539c1.133,0,1.879-0.204,2.224-0.64c0.345-0.422,0.525-1.157,0.525-2.191V4.355H8.733c-1.105,0-1.906,0.123-2.417,0.367C5.791,4.967,5.362,5.443,5.017,6.151C4.658,6.873,4.451,7.73,4.381,8.709H2.613V2.613h21.774v6.097H22.48c-0.359-1.701-0.87-2.858-1.52-3.457s-1.686-0.898-3.108-0.898h-1.976v16.331c0,1.062,0.165,1.81,0.525,2.218c0.358,0.409,1.104,0.613,2.236,0.613h0.595v1.741H7.283z"></path>
@@ -246,9 +278,9 @@
             </div>
             <div class="tool_button loaded" id="tool_zoom" title="Zoom Tool  (Z)">
                 <svg viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg" width="27" height="27"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" class="svg_icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eye-Page%201"
-                         viewBox="0 0 27 27" style="background-color:#ffffff00" version="1.1" xml:space="preserve"
+                     class="svg_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eye-Page%201"
+                         viewBox="0 0 27 27" style="background-color:#ffffff" xml:space="preserve"
                          x="0px" y="0px">
 	<circle fill="#2F2F2C" cx="10.887" cy="10.887" r="6.532"></circle>
                         <path fill="#2F2F2C"
@@ -267,20 +299,39 @@
                 <div id="slide"></div>
                 <div id="color-hex">#000000</div>
             </div>
-            <div id="line_panel" class="context_panel">
-                <h4 class="clearfix">直线</h4>
-                <h4 class="clearfix">线条形状</h4>
-                <h4 class="clearfix">线条颜色</h4>
-                <h4 class="clearfix">线条大小</h4>
-                <h4 class="clearfix">填充颜色</h4>
+            <div id="shape-panel" class="context_panel">
+                <h4 class="clearfix" id="shape-text">直线</h4>
+                <div class="panel-line panel-content">
+                    <span>线条大小</span>
+                    <select id="sel-stroke-width">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="4">5</option>
+                    </select>
+                </div>
+                <div class="panel-line panel-content">
+                    <span>线条形状</span>
+                    <select id="sel-line-style">
+                        <option value="实线">实线</option>
+                        <option value="短划线">短划线</option>
+                        <option value="点线">点线</option>
+                    </select>
+                </div>
+                <div class="panel-line panel-content">
+                    <span>线条颜色</span>
+                    <span>
+                        <input type="color" id="sel-stroke" value="#000000">
+                    </span>
+                </div>
 
-            </div>
-            <div id="rect_panel" class="context_panel">
-                <h4 class="clearfix">矩形</h4>
-                <h4 class="clearfix">线条形状</h4>
-                <h4 class="clearfix">线条颜色</h4>
-                <h4 class="clearfix">线条大小</h4>
-                <h4 class="clearfix">填充颜色</h4>
+                <div class="panel-line panel-content">
+                    <span>填充颜色</span>
+                    <span>
+                        <input type="color" id="sel-fill-color" value="#000000">
+                    </span>
+                </div>
 
             </div>
 
@@ -288,8 +339,8 @@
     </div>
     <div id="workarea" style="overflow: hidden; line-height: 923px;" class="select">
         <div id="svgcanvas" style="position: relative; width: 1093px; height: 923px;">
-            <svg width="1093" height="923" id="svgroot" xlinkns="http://www.w3.org/1999/xlink">
-                <svg id="canvasBackground" width="1024" height="768" x="34.5" y="77.5" overflow="none"
+            <svg width="1093" height="923" id="svgroot" xmlns="http://www.w3.org/2000/svg">
+                <svg id="canvasBackground" width="1024" height="768" x="34.5" y="77.5"
                      style="pointer-events:none">
                     <defs id="placeholder_defs">
                         <pattern id="checkerPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="20" height="20"
@@ -307,11 +358,7 @@
                 </svg>
                 <svg id="svgcontent" width="1024" height="768" x="34.5" y="77.5" overflow="hidden"
                      xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 768">
-
-                    <!--                     xmlns:se="http://svg-edit.googlecode.com"-->
-                    <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
-
+                     viewBox="0 0 1024 768">
                     <g style="pointer-events:none"><title style="pointer-events:inherit">background</title>
                         <rect x="-1" y="-1" width="1026" height="770" id="canvas_background" fill="#fff"
                               style="pointer-events:inherit"></rect>
@@ -319,12 +366,9 @@
                             <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none"
                                   fill="url(#gridpattern)" style="pointer-events: none;"></rect>
                         </g>
-
                     </g>
-                    <!--                    <g style="pointer-events:all"><title style="pointer-events:inherit">Layer 1</title></g>-->
                     <g id="selectorParentGroup">
                         <g id="selectorCir" display="none" transform="translate(0,0)">
-
                         </g>
                     </g>
                 </svg>
@@ -339,282 +383,6 @@
 <script src="./js/lib/svg.js"></script>
 <script src="./js/variable.js"></script>
 <script src="./js/util.js"></script>
-<script src="./js/colorPicker.js"></script>
-<script>
-    ColorPicker(
-        document.getElementById('slide'),
-        document.getElementById('picker'),
-        function (hex, hsv, rgb) {
-            document.body.style.backgroundColor = hex;
-            color_hex.textContent = hex;
-            // console.log(hex, hsv, rgb);
-        });
-
-    menu_bar.addEventListener('click', handleMenuClick)
-    tools_left.addEventListener('click', handleToolsClick)
-    svgCanvas.addEventListener('click', handleSvgCanvasClick)
-    svgCanvas.addEventListener('mousedown', mousedownHandler)
-    document.addEventListener('mouseup', mouseupHandler)
-
-
-    //鼠标样式
-
-    //点击左侧工具栏处理函数
-    function handleToolsClick(event) {
-        //改变样式
-        toogleClass(event.target)
-        if (selectSVG !== null) {
-            updateSVG($(selectSVG), selectParams)
-            removeSelectTips(selectorCir)
-            selectSVG = null
-        }
-    }
-
-    //顶部工具栏处理函数
-    function handleMenuClick(event) {
-        event.target.classList.toggle('open')
-
-    }
-
-    //点击画布处理函数
-    function handleSvgCanvasClick(event) {
-        //获取鼠标点击的坐标
-        let x = event.pageX - offsetX
-        let y = event.pageY - offsetY
-        pointerStart.x = x
-        pointerStart.y = y
-        if (pointerValue[shape] !== 'default') {
-            return
-        }
-        let target = $(event.target)
-        let name = target[0].nodeName
-        //判断是否为辅助点
-        if (target && target.attr('id') && target.attr('id').startsWith('tip')) {
-            return
-        }
-        //判断是否重复选择自身
-        if (target[0] === selectSVG) {
-            return
-        }
-        //判断选择其他svg元素
-        if (selectSVG !== null) {
-            updateSVG($(selectSVG), selectParams)
-            selectSVG = null
-            removeSelectTips(selectorCir)
-        }
-        //选择svg line元素
-        //选择svg rect元素 ，创建辅助点， 展示rect面板,同时保存元素样式，取消选中时复原
-        selectPanel = document.getElementById(name + suffix)
-        selectParams = {
-            stroke: target.attr('stroke'),
-            'stroke-linecap': 'butt'
-        }
-        selectPanel && (selectPanel.style.display = "block")
-        updateSVG(target, {
-            stroke: 'red',
-            'stroke-linecap': 'round',
-        })
-        //`stroke-linecap`
-        svgHandle[name] && createSelectTips(target, selectorCir)
-        // svgHandle[name](target, selectorCir)
-        selectSVG = target[0]
-    }
-
-    svgCanvas.addEventListener('contextmenu', function (event) {
-        event.preventDefault()
-        shape = "select"
-        svgCanvas.style.cursor = pointerValue[shape]
-        toogleClass(tool_select)
-        removeSelectTips(selectorCir)
-        selectPanel && (selectPanel.style.display = "none")
-        selectSVG && $(selectSVG).attr('stroke', selectParams.stroke);
-        selectPanel = null
-        selectSVG = null
-        editFalg = false
-        return false
-    })
-
-    function mouseupHandler(ev) {
-        svgCanvas.removeEventListener('mousemove', mousemoveHandler, true)
-        flagDraw = false
-        dargFalg = false
-        editFalg = false
-        currentTarget = null
-        pointerStart = {
-            x: 0, y: 0
-        }
-        pointerEnd = {
-            x: 0, y: 0
-        }
-        console.log("mouseupHandler")
-
-    }
-
-    function mousemoveHandler(ev) {
-        ev.stopPropagation()
-        let x = ev.pageX - offsetX
-        let y = ev.pageY - offsetY
-
-        let target = ev.target
-        //编辑
-        if (selectSVG && editFalg) {
-            //编辑矩形
-            if (selectSVG.nodeName == 'rect') {
-                let offsetX = x - pointerStart.x
-                let offsetY = y - pointerStart.y
-                let width = Math.abs(offsetX)
-                let height = Math.abs(offsetY)
-                offsetX < 0 && $(selectSVG).attr('x', x);
-                offsetY < 0 && $(selectSVG).attr('y', y);
-                updateSVG($(selectSVG), {
-                    width,
-                    height
-                })
-            }
-            if (selectSVG.nodeName == 'line') {
-                let id = parseInt(selectTip.getAttribute('id').split('_')[1])
-                updateSVG($(selectSVG), {
-                    ['x' + (id + 1)]: x, ['y' + (id + 1)]: y
-                })
-            }
-            if (selectSVG.nodeName == 'circle') {
-                console.log('click')
-                //计算圆的半径
-                let r = Math.floor(Math.sqrt(computeDistance(pointerStart.x, pointerStart.y, x, y) ** 2 / 8));
-                let offsetX = x - pointerStart.x
-                let offsetY = y - pointerStart.y
-                let sel = $(selectSVG)
-                updateSVG(sel, {
-                    r: r,
-                    cx: pointerStart.x + (offsetX < 0 ? -r : r), cy: pointerStart.y + (offsetY < 0 ? -r : r)
-                })
-            }
-            createSelectTips($(selectSVG), selectorCir)
-            return
-        }
-        // && target == selectSVG
-        //拖动
-        if (selectSVG && dargFalg) {
-            if (selectSVG.nodeName == 'rect') {
-                let currentX = isNaN(parseInt(selectSVG.getAttribute('x'))) ? 0 : parseInt(selectSVG.getAttribute('x'))
-                let currentY = isNaN(parseInt(selectSVG.getAttribute('y'))) ? 0 : parseInt(selectSVG.getAttribute('y'))
-                updateSVG($(selectSVG), {
-                    x: currentX + x - pointerStart.x,
-                    y: currentY + y - pointerStart.y
-                })
-                pointerStart.x = x
-                pointerStart.y = y
-            }
-            if (selectSVG.nodeName == 'line') {
-                let sel = $(selectSVG)
-                let x1 = parseInt(sel.attr('x1'));
-                let y1 = parseInt(sel.attr('y1'));
-                let x2 = parseInt(sel.attr('x2'));
-                let y2 = parseInt(sel.attr('y2'));
-                // addNum
-                let moveX = minNum(x, pointerStart.x)
-                let moveY = minNum(y, pointerStart.y)
-                updateSVG(sel, {
-                    x1: x1 - moveX, y1: y1 - moveY,
-                    x2: x2 - moveX, y2: y2 - moveY
-                })
-                pointerStart.x = x
-                pointerStart.y = y
-            }
-            if (selectSVG.nodeName == 'circle') {
-                let sel = $(selectSVG)
-                let currentX = parseInt(sel.attr('cx'))
-                let currentY = parseInt(sel.attr('cy'))
-                updateSVG(sel, {
-                    cx: currentX + minNum(x, pointerStart.x), cy: currentY + minNum(y, pointerStart.y)
-                })
-                pointerStart.x = x
-                pointerStart.y = y
-            }
-            createSelectTips($(selectSVG), selectorCir)
-            return
-        }
-        if (!flagDraw) return false
-        //初次绘制
-        if (shape == "rect") {
-            if (currentTarget) {
-                let offsetX = x - pointerStart.x
-                let offsetY = y - pointerStart.y
-                let width = Math.abs(offsetX)
-                let height = Math.abs(offsetY)
-                offsetX < 0 && currentTarget.attr('x', x);
-                offsetY < 0 && currentTarget.attr('y', y);
-                updateSVG(currentTarget, {
-                    width,
-                    height
-                })
-                return
-            }
-            currentTarget = createSVGRact(pointerStart.x, pointerStart.y, x, y)
-        }
-        if (shape === "line") {
-            if (currentTarget) {
-                updateSVG(currentTarget, {
-                    x2: x,
-                    y2: y
-                })
-                return
-            }
-            currentTarget = createLine(pointerStart.x, pointerStart.y, x, y)
-        }
-        if (shape === 'ellipse') {
-
-            if (currentTarget) {
-                updateSVG(currentTarget, {
-                    cx: (pointerStart.x + x) / 2,
-                    cy: (pointerStart.y + y) / 2,
-                    r: Math.sqrt((pointerStart.x - x - 1) ** 2 + (pointerStart.y - y - 1) ** 2) / 2
-                })
-                return
-            }
-            currentTarget = createCircle(pointerStart.x, pointerStart.y, x, y);
-
-        }
-
-
-    }
-
-    function mousedownHandler(ev) {
-        svgCanvas.addEventListener('mousemove', mousemoveHandler, true)
-        let x = ev.pageX - offsetX
-        let y = ev.pageY - offsetY
-        //层级如何保证看到的是置于顶层的
-        let target = ev.target
-        flagDraw = true
-        if (pointerValue[shape] == 'default') {
-            dargFalg = true
-        }
-        if (target.getAttribute('id') && target.getAttribute('id').startsWith('tip')) {
-            editFalg = true
-            selectTip = target
-            let id = parseInt(selectTip.getAttribute('id').split('_')[1])
-            //获取固定点
-            var rectPointMap = {
-                "0": "2",
-                "1": "3",
-                "2": "0",
-                "3": "1"
-            }
-            let point = "#tip_" + rectPointMap[id]
-            let x1 = parseInt($(point).attr('cx'))
-            let y1 = parseInt($(point).attr('cy'))
-            pointerStart = {
-                x: x1, y: y1
-            }
-            return
-        }
-        pointerStart = {
-            x, y
-        }
-
-    }
-
-
-</script>
+<script type="module" src="./js/index.js"></script>
 </body>
 </html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="line_panel" class="context_panel">
+    <h4 class="clearfix" >直线</h4>
+    <div class="panel-line panel-content">
+        <span>线条大小</span>
+        <select id="line-sel-stroke-width">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="4">5</option>
+        </select>
+    </div>
+    <div class="panel-line panel-content">
+        <span>线条形状</span>
+        <select id="line-sel-line-style">
+            <option value="实线">实线</option>
+            <option value="短划线">短划线</option>
+            <option value="点线">点线</option>
+        </select>
+    </div>
+    <div class="panel-line panel-content">
+        <span>线条颜色</span>
+        <span>
+                        <input type="color" id="line-sel-stroke" value="#000000">
+                    </span>
+    </div>
+
+    <div class="panel-line panel-content">
+        <span>填充颜色</span>
+        <span>
+                        <input type="color" id="line-sel-fill-color" value="#000000">
+                    </span>
+    </div>
+
+</div>
+<div id="rect_panel" class="context_panel">
+    <h4 class="clearfix">矩形</h4>
+    <div class="panel-line panel-content">
+        <span>线条大小</span>
+        <select id="rect-sel-stroke-width">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="4">5</option>
+        </select>
+    </div>
+    <div class="panel-line panel-content">
+        <span>线条形状</span>
+        <select id="rect-sel-line-style">
+            <option value="实线">实线</option>
+            <option value="短划线">短划线</option>
+            <option value="点线">点线</option>
+        </select>
+    </div>
+    <div class="panel-line panel-content">
+        <span>线条颜色</span>
+        <span>
+                        <input type="color" id="rect-sel-stroke" value="#000000">
+                    </span>
+    </div>
+
+    <div class="panel-line panel-content">
+        <span>填充颜色</span>
+        <span>
+                        <input type="color" id="rect-sel-fill-color" value="#000000">
+                    </span>
+    </div>
+
+</div>
+<div id="circle_panel" class="context_panel">
+    <h4 class="clearfix">圆形</h4>
+    <div class="panel-line panel-content">
+        <span>线条大小</span>
+        <select id="circle-sel-stroke-width">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="4">5</option>
+        </select>
+    </div>
+    <div class="panel-line panel-content">
+        <span>线条形状</span>
+        <select id="circle-sel-line-style">
+            <option value="实线">实线</option>
+            <option value="短划线">短划线</option>
+            <option value="点线</">点线</option>
+        </select>
+    </div>
+    <div class="panel-line panel-content">
+        <span>线条颜色</span>
+        <span>
+                        <input type="color" id="circle-sel-stroke" value="#000000">
+                    </span>
+    </div>
+
+    <div class="panel-line panel-content">
+        <span>填充颜色</span>
+        <span>
+                        <input type="color" id="circle-sel-fill-color" value="#000000">
+                    </span>
+    </div>
+
+</div>
+<script>
+    ColorPicker(
+        document.getElementById('slide'),
+        document.getElementById('picker'),
+        function (hex, hsv, rgb) {
+            document.body.style.backgroundColor = hex;
+            color_hex.textContent = hex;
+            // console.log(hex, hsv, rgb);
+        });
+</script>
+</body>
+</html>
